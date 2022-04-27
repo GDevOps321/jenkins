@@ -35,7 +35,10 @@ pipeline
                                  PROJECT_NAME ="Todoapp"
                                  UBUNTU_SSH_CRED = credentials('UBUNTU-SSH')
                        }
-
+                 triggers
+                  {
+                     cron('H */4 * * 1-5')
+                  }
 
    stages {
      stage ('one'){
