@@ -29,7 +29,7 @@ pipeline
 
    agent any
    options {
-                  disableConcurrentBuilds()
+                  disableoldBuilds()
              }
 
 
@@ -37,7 +37,7 @@ pipeline
      stage ('one'){
        steps
         {
-           sh "echo ${Name}"
+           sh "echo Akkala"
         }
      }
    }
