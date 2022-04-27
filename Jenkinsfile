@@ -1,6 +1,9 @@
+/*
 pipeline
  {
- /* agent any */
+  */
+/* agent any *//*
+
    agent {
      node {
 
@@ -20,4 +23,22 @@ pipeline
          }
      }
 
+ } */
+
+ pipeline {
+
+   agent any
+
+   envinorment {
+     Name = "vamsi"
+   }
+   stages{
+    stage{
+     steps('one')
+     {
+        sh "echo ${Name}"
+     }
+    }
+     }
  }
+
