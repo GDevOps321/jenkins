@@ -33,12 +33,12 @@ pipeline
      Name = "vamsi"
    }
    stages{
-    stage{
-     steps('one')
-     {
-        sh "echo ${Name}"
+     stage{
+       steps('one')
+        {
+           sh "echo ${Name}"
+        }
      }
-    }
-     }
+   }
  }
 
