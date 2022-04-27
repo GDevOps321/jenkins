@@ -34,8 +34,8 @@ pipeline
 
 
    stages {
-     stage {
-       steps ('one')
+     stage ('one'){
+       steps
         {
            sh "echo ${Name}"
         }
