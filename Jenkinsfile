@@ -28,13 +28,14 @@ pipeline
  pipeline {
 
    agent any
+   options {
+                  disableConcurrentBuilds()
+             }
 
-   envinorment {
-     Name = "vamsi"
-   }
-   stages{
-     stage{
-       steps('one')
+
+   stages {
+     stage {
+       steps ('one')
         {
            sh "echo ${Name}"
         }
