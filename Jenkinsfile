@@ -29,15 +29,20 @@ pipeline
 
    agent any
    options {
-                  disableoldBuilds()
+                  disableConcurrentBuilds()
              }
+             environment {
+                                 PROJECT_NAME ="Todoapp"
+                                 UBUNTU_SSH_CRED = credentials('UBUNTU-SSH')
+                       }
 
 
    stages {
      stage ('one'){
        steps
         {
-           sh "echo Akkala"
+           sh "echo ${PROJECT_NAME}"
+           sh "env"
         }
      }
    }
