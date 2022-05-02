@@ -68,3 +68,25 @@ pipelineJob("CI-Pipelines/user-ci") {
         }
     }
 }
+pipelineJob("CI-Pipelines/cart-ci") {
+    configure { flowdefinition ->
+        flowdefinition << delegate.'definition'(class: 'org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition', plugin: 'workflow-cps') {
+            'scm'(class: 'hudson.plugins.git.GitSCM', plugin: 'git') {
+                'userRemoteConfigs' {
+                    'hudson.plugins.git.UserRemoteConfig' {
+                        'url'('https://github.com/GDevOps321/cart.git')
+                    }
+                }
+
+                'branches' {
+                    'hudson.plugins.git.BranchSpec' {
+                        'name'('*/main')
+                        //'name'('*/tags/*')
+                    }
+                }
+            }
+            'scriptPath'('Jenkinsfile')
+            'lightweight'(true)
+        }
+    }
+}
