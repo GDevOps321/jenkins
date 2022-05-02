@@ -30,7 +30,7 @@ pipelineJob("CI-Pipelines/catalogue-ci") {
             'scm'(class: 'hudson.plugins.git.GitSCM', plugin: 'git') {
                 'userRemoteConfigs' {
                     'hudson.plugins.git.UserRemoteConfig' {
-                        'url'('https://github.com/GDevOps321/frontend-1.git')
+                        'url'('https://github.com/GDevOps321/catalogue.git')
                     }
                 }
 
