@@ -5,14 +5,15 @@ def call(Map params = [:]) {
     ]
     args << params
     pipeline {
-        agent  any
-           // label "${args.SLAVE_LABEL}"
+        agent {
+            label "${args.SLAVE_LABEL}"
+        }
 
         environment {
             COMPONENT     = "${args.COMPONENT}"
             NEXUS_IP      = "${args.NEXUS_IP}"
             PROJECT_NAME  = "${args.PROJECT_NAME}"
-            //SLAVE_LABEL   = "${args.SLAVE_LABEL}"
+            SLAVE_LABEL   = "${args.SLAVE_LABEL}"
             APP_TYPE      = "${args.APP_TYPE}"
         }
 
@@ -41,9 +42,7 @@ def call(Map params = [:]) {
                     }
 
                     stage('prepared artifact') {
-                        when {
-                            environment name: 'APP_TYPE', value: 'JAVA'
-                        }
+
                         steps {
                             sh '''
                              zip -r ${COMPONENT}.zip node_modules server.js
@@ -51,6 +50,10 @@ def call(Map params = [:]) {
                         }
                     }
                     stage('Download dependencies') {
+                        when {
+                            environment name: 'APP_TYPE', value: 'JAVA'
+                        }
+
                         steps {
                             sh '''
                                    mvn compile
@@ -74,9 +77,9 @@ def call(Map params = [:]) {
                         }
                     }
                     stage('prepare artifact') {
-                       // when {
-                      //      environment name: 'APP_TYPE', value: 'PYTHON'
-                       // }
+                        when {
+                           environment name: 'APP_TYPE', value: 'PYTHON'
+                        }
                         steps {
                                   sh '''
                                      zip -r ${COMPONENT}.zip *
