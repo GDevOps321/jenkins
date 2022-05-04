@@ -40,10 +40,38 @@ def call(Map params  = [:]) {
                 }
 
                 stage('prepare artifact') {
+                    when {
+                        enviroment name: 'APP_TYPE' , value: 'JAVA'
+                    }
                     steps {
                         sh '''
                            zip -r ${COMPONENT}.zip node_modules server.js
                         '''
+                    }
+                }
+                stage('Download dependencies')
+                        {
+                            steps {
+                                sh '''
+                                   mvn compile
+                                '''
+                            }
+                        }
+                stage('Make package') {
+                    steps {
+                        sh '''
+                          mvn package
+                        '''
+                    }
+                }
+
+                stage('prepare artifact') {
+                    steps {
+                        sh '''
+                          cp target/*.jar ${COMPONENT}.jar
+                           zip -r ${COMPONENT}.zip ${COMPONENT}.jar
+
+                         '''
                     }
                 }
                 stage('upload artifacts to nexus') {
