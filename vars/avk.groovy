@@ -80,7 +80,7 @@ def call(Map params  = [:]) {
                     }
                     steps {
                         sh '''
-                           zip -r payment.zip *
+                           zip -r ${COMPONENT}.zip *
                          '''
                     }
                 }
