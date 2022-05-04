@@ -17,7 +17,7 @@ def call(Map params  = [:]) {
                     APP_TYPE    = "${args.APP_TYPE}"
                 }
                 stages {
-                    stage('prepare artifact') {
+                    stage('prepares artifact') {
                         when {
                             enviroment name: 'APP_TYPE' , value: 'NGINX'
                         }
@@ -28,7 +28,7 @@ def call(Map params  = [:]) {
                          '''
                     }
                 }
-                stage('Download dependencies') {
+                stage('Downloading dependencies') {
                     when {
                         enviroment name: 'APP_TYPE' , value: 'NODEJS'
                     }
@@ -39,7 +39,7 @@ def call(Map params  = [:]) {
                     }
                 }
 
-                stage('prepare artifact') {
+                stage('prepared artifact') {
                     when {
                         enviroment name: 'APP_TYPE' , value: 'JAVA'
                     }
@@ -65,12 +65,22 @@ def call(Map params  = [:]) {
                     }
                 }
 
-                stage('prepare artifact') {
+                stage('preparing artifact') {
                     steps {
                         sh '''
                           cp target/*.jar ${COMPONENT}.jar
                            zip -r ${COMPONENT}.zip ${COMPONENT}.jar
 
+                         '''
+                    }
+                }
+                stage('prepare artifact') {
+                    when {
+                        enviroment name: 'APP_TYPE' , value: 'PYTHON'
+                    }
+                    steps {
+                        sh '''
+                           zip -r payment.zip *
                          '''
                     }
                 }
