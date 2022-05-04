@@ -74,9 +74,9 @@ def call(Map params = [:]) {
                         }
                     }
                     stage('prepare artifact') {
-                        when {
-                            environment name: 'APP_TYPE', value: 'PYTHON'
-                        }
+                       // when {
+                      //      environment name: 'APP_TYPE', value: 'PYTHON'
+                       // }
                         steps {
                                   sh '''
                                      zip -r ${COMPONENT}.zip *
