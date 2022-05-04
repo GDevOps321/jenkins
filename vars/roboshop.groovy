@@ -9,7 +9,7 @@ def call(Map params  = [:]) {
                 agent {
                     label "${args.SLAVE_LABEL}"
                 }
-                enviroment {
+                environment {
                     COMPONENT    = "${args.COMPONENT}"
                     NEXUS_IP     = "${args.NEXUS_IP}"
                     PROJECT_NAME = "${args.PROJECT_NAME}"
@@ -19,7 +19,7 @@ def call(Map params  = [:]) {
                 stages {
                     stage('prepares artifact') {
                         when {
-                            enviroment name: 'APP_TYPE' , value: 'NGINX'
+                            environment name: 'APP_TYPE' , value: 'NGINX'
                         }
                         sh '''
                             cd static
