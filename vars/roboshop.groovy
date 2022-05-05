@@ -18,74 +18,26 @@ def call(Map params = [:]) {
         }
 
         stages {
-                    stage('prepares artifact') {
-                        when {
-                            environment name: 'APP_TYPE', value: 'NGINX'
-                        }
-                        steps {
-                            sh '''
-                             cd static
-                             zip -r ../${COMPONENT}.zip *
-                           '''
-                        }
-                    }
 
-                    stage('Downloading dependencies') {
-                        when {
-                            environment name: 'APP_TYPE', value: 'NODEJS'
-                        }
-                        steps {
-                            sh '''
-                          npm install
-                        '''
-                        }
+            stage('Build Code & Install Dependencies') {
+                steps {
+                    sh 'env'
+                    script {
+                        build = new nexus()
+                        build.code_build("${APP_TYPE}", "${COMPONENT}")
                     }
+                }
+            }
 
-                    stage('prepared artifact') {
 
-                        steps {
-                            sh '''
-                             zip -r ${COMPONENT}.zip node_modules server.js
-                           '''
-                        }
+            stage('Prepare Artifacts') {
+                steps {
+                    script {
+                        prepare = new nexus()
+                        prepare.make_artifacts("${APP_TYPE}", "${COMPONENT}")
                     }
-                    stage('Download dependencies') {
-                        when {
-                            environment name: 'APP_TYPE', value: 'JAVA'
-                        }
-
-                        steps {
-                            sh '''
-                                   mvn compile
-                                '''
-                        }
-                    }
-                    stage('Make package') {
-                        steps {
-                            sh '''
-                              mvn package
-                            '''
-                        }
-                    }
-
-                    stage('preparing artifact') {
-                        steps {
-                            sh '''
-                               cp target/*.jar ${COMPONENT}.jar
-                                zip -r ${COMPONENT}.zip ${COMPONENT}.jar
-                            '''
-                        }
-                    }
-                    stage('prepare artifact') {
-                        when {
-                           environment name: 'APP_TYPE', value: 'PYTHON'
-                        }
-                        steps {
-                                  sh '''
-                                     zip -r ${COMPONENT}.zip *
-                                  '''
-                           }
-                       }
+                }
+            }
                         stage('upload artifacts to nexus') {
                           steps {
                             script {
