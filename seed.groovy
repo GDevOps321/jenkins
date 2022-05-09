@@ -2,136 +2,39 @@ folder('CI-Pipelines') {
     displayName('CI Pipelines')
     description('CI Pipelines')
 }
-    pipelineJob("CI-Pipelines/frontend-ci") {
+
+def component = ["cart", "catalogue","user","payment","shipping","frontend"];
+
+def count=(component.size()-1)
+for (i in 0..count) {
+    def j=component[i]
+    pipelineJob("CI-Pipelines/${j}-ci") {
         configure { flowdefinition ->
-            flowdefinition << delegate.'definition'(class: 'org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition', plugin: 'workflow-cps') {
-                'scm'(class: 'hudson.plugins.git.GitSCM', plugin: 'git') {
+            flowdefinition / 'properties' << 'org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty' {
+                'triggers' {
+                    'hudson.triggers.SCMTrigger' {
+                        'spec'('*/2 * * * 1-5')
+                        'ignorePostCommitHooks'(false)
+                    }
+                }
+            }
+            flowdefinition << delegate.'definition'(class:'org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition',plugin:'workflow-cps') {
+                'scm'(class:'hudson.plugins.git.GitSCM',plugin:'git') {
                     'userRemoteConfigs' {
                         'hudson.plugins.git.UserRemoteConfig' {
-                            'url'('https://github.com/GDevOps321/frontend-1.git')
+                            'url'('https://github.com/zsdevops01/'+j+'.git')
+                            'refspec'('\'+refs/tags/*\':\'refs/remotes/origin/tags/*\'')
                         }
                     }
-
                     'branches' {
                         'hudson.plugins.git.BranchSpec' {
-                            'name'('*/main')
-                            //'name'('*/tags/*')
+                            'name'('*/tags/*')
                         }
                     }
                 }
                 'scriptPath'('Jenkinsfile')
                 'lightweight'(true)
             }
-        }
-    }
-pipelineJob("CI-Pipelines/catalogue-ci") {
-    configure { flowdefinition ->
-        flowdefinition << delegate.'definition'(class: 'org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition', plugin: 'workflow-cps') {
-            'scm'(class: 'hudson.plugins.git.GitSCM', plugin: 'git') {
-                'userRemoteConfigs' {
-                    'hudson.plugins.git.UserRemoteConfig' {
-                        'url'('https://github.com/GDevOps321/catalogue.git')
-                    }
-                }
-
-                'branches' {
-                    'hudson.plugins.git.BranchSpec' {
-                        'name'('*/main')
-                        //'name'('*/tags/*')
-                    }
-                }
-            }
-            'scriptPath'('Jenkinsfile')
-            'lightweight'(true)
-        }
-    }
-}
-pipelineJob("CI-Pipelines/user-ci") {
-    configure { flowdefinition ->
-        flowdefinition << delegate.'definition'(class: 'org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition', plugin: 'workflow-cps') {
-            'scm'(class: 'hudson.plugins.git.GitSCM', plugin: 'git') {
-                'userRemoteConfigs' {
-                    'hudson.plugins.git.UserRemoteConfig' {
-                        'url'('https://github.com/GDevOps321/user.git')
-                    }
-                }
-
-                'branches' {
-                    'hudson.plugins.git.BranchSpec' {
-                        'name'('*/main')
-                        //'name'('*/tags/*')
-                    }
-                }
-            }
-            'scriptPath'('Jenkinsfile')
-            'lightweight'(true)
-        }
-    }
-}
-pipelineJob("CI-Pipelines/cart-ci") {
-    configure { flowdefinition ->
-        flowdefinition << delegate.'definition'(class: 'org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition', plugin: 'workflow-cps') {
-            'scm'(class: 'hudson.plugins.git.GitSCM', plugin: 'git') {
-                'userRemoteConfigs' {
-                    'hudson.plugins.git.UserRemoteConfig' {
-                        'url'('https://github.com/GDevOps321/cart.git')
-                    }
-                }
-
-                'branches' {
-                    'hudson.plugins.git.BranchSpec' {
-                        'name'('*/main')
-                        //'name'('*/tags/*')
-                    }
-                }
-            }
-            'scriptPath'('Jenkinsfile')
-            'lightweight'(true)
-        }
-    }
-}
-
-pipelineJob("CI-Pipelines/shipping-ci") {
-    configure { flowdefinition ->
-        flowdefinition << delegate.'definition'(class: 'org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition', plugin: 'workflow-cps') {
-            'scm'(class: 'hudson.plugins.git.GitSCM', plugin: 'git') {
-                'userRemoteConfigs' {
-                    'hudson.plugins.git.UserRemoteConfig' {
-                        'url'('https://github.com/GDevOps321/shipping.git')
-                    }
-                }
-
-                'branches' {
-                    'hudson.plugins.git.BranchSpec' {
-                        'name'('*/main')
-                        //'name'('*/tags/*')
-                    }
-                }
-            }
-            'scriptPath'('Jenkinsfile')
-            'lightweight'(true)
-        }
-    }
-}
-pipelineJob("CI-Pipelines/payment-ci") {
-    configure { flowdefinition ->
-        flowdefinition << delegate.'definition'(class: 'org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition', plugin: 'workflow-cps') {
-            'scm'(class: 'hudson.plugins.git.GitSCM', plugin: 'git') {
-                'userRemoteConfigs' {
-                    'hudson.plugins.git.UserRemoteConfig' {
-                        'url'('https://github.com/GDevOps321/payment.git')
-                    }
-                }
-
-                'branches' {
-                    'hudson.plugins.git.BranchSpec' {
-                        'name'('*/main')
-                        //'name'('*/tags/*')
-                    }
-                }
-            }
-            'scriptPath'('Jenkinsfile')
-            'lightweight'(true)
         }
     }
 }
