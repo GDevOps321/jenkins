@@ -1,12 +1,18 @@
 def call(Map params = [:]) {
 
     def args = [
-            NEXUS_IP               : '172.31.20.130',
+            NEXUS_IP               : '172.31.14.124',
     ]
     args << params
+
+
     pipeline {
         agent {
             label "${args.SLAVE_LABEL}"
+        }
+
+        triggers {
+            pollSCM('* * * * 1-5')
         }
 
         environment {
@@ -38,13 +44,34 @@ def call(Map params = [:]) {
                     }
                 }
             }
-                        stage('upload artifacts to nexus') {
-                          steps {
-                            script {
-                                nexus
-                            }
-                          }
-                       }
+
+            stage('Upload Artifacts') {
+                steps {
+                    script {
+                        prepare = new nexus()
+                        prepare.nexus(COMPONENT)
+                    }
                 }
             }
+
+            //stage('Deploy to Dev Env') {
+               // steps {
+                 //   script {
+                 //       get_branch = "env | grep GIT_BRANCH | awk -F / '{print \$NF}' | xargs echo -n"
+                  //      env.get_branch_exec=sh(returnStdout: true, script: get_branch)
+                 //   }
+                   // build job: 'Deployment Pipeline', parameters: [string(name: 'ENV', value: 'dev'), string(name: 'COMPONENT', value: "${COMPONENT}"), string(name: 'VERSION', value: "${get_branch_exec}")]
+                //}
+           // }
+
+        }
+
     }
+
+    post {
+        always {
+            cleanWs()
+        }
+    }
+
+}
