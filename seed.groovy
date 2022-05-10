@@ -23,12 +23,13 @@ for (i in 0..count) {
                     'userRemoteConfigs' {
                         'hudson.plugins.git.UserRemoteConfig' {
                             'url'('https://github.com/zsdevops01/'+j+'.git')
-                            'refspec'('\'+refs/tags/*\':\'refs/remotes/origin/tags/*\'')
+                           // 'refspec'('\'+refs/tags/*\':\'refs/remotes/origin/tags/*\'')
                         }
                     }
                     'branches' {
                         'hudson.plugins.git.BranchSpec' {
-                            'name'('*/tags/*')
+                           // 'name'('*/tags/*')
+                            'name'('*/main')
                         }
                     }
                 }
