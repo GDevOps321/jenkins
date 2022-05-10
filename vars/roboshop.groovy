@@ -49,7 +49,7 @@ def call(Map params = [:]) {
                 steps {
                     script {
                         prepare = new nexus()
-                        prepare.nexus1(COMPONENT)
+                        prepare.nexus(COMPONENT)
                     }
                 }
             }
