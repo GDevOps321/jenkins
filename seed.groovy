@@ -30,7 +30,6 @@ for (i in 0..count) {
                         'hudson.plugins.git.BranchSpec' {
                             'name'('*/tags/*')
                             //'name'('*/main')
-
                         }
                     }
                 }
