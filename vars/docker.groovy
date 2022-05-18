@@ -1,6 +1,7 @@
 def call(Map params = [:]) {
 
     def args = [
+
             SLAVE_LABEL: "DOCKER"
     ]
     args << params
@@ -8,7 +9,9 @@ def call(Map params = [:]) {
 
     pipeline {
         agent {
-            label "${args.SLAVE_LABEL}"
+            node {
+                label "${args.SLAVE_LABEL}"
+            }
         }
 
         triggers {
@@ -17,7 +20,6 @@ def call(Map params = [:]) {
 
         environment {
             COMPONENT = "${args.COMPONENT}"
-            NEXUS_IP = "${args.NEXUS_IP}"
             PROJECT_NAME = "${args.PROJECT_NAME}"
             SLAVE_LABEL = "${args.SLAVE_LABEL}"
             APP_TYPE = "${args.APP_TYPE}"
@@ -35,8 +37,7 @@ def call(Map params = [:]) {
                 }
                     sh '''
                          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 191059510084.dkr.ecr.us-east-1.amazonaws.com
-                         docker build -t cart .
-                         docker tag cart:latest 191059510084.dkr.ecr.us-east-1.amazonaws.com/cart:get_branch_exec
+                         docker build -t 191059510084.dkr.ecr.us-east-1.amazonaws.com/${COMPONENT}:get_branch_exec .
                        '''
 
                 }
@@ -51,7 +52,7 @@ def call(Map params = [:]) {
                     }
                     sh '''
             
-                    docker push 191059510084.dkr.ecr.us-east-1.amazonaws.com/cart:get_branch_exec
+                    docker push 191059510084.dkr.ecr.us-east-1.amazonaws.com/${COMPONENT}:get_branch_exec
     
                       '''
                 }
