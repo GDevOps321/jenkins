@@ -41,11 +41,11 @@ def call(Map params = [:]) {
                        '''
                 }
 
-                }
             }
 
 
             stage('Docker push') {
+
                 steps {
                     script {
                         get_branch = "env | grep GIT_BRANCH | awk -F / '{print \$NF}' | xargs echo -n"
@@ -61,3 +61,4 @@ def call(Map params = [:]) {
 
         }
     }
+}
